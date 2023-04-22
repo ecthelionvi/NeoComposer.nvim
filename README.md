@@ -144,7 +144,7 @@ use {
 }
 ```
 
-2. Setup the plugin in your `init.lua`. Skip this step if you're fine with the default settings or using lazy.nvim with opts set as above.
+2. Setup the plugin in your `init.lua`. Skip this step if you are using lazy.nvim with opts set as above.
 ```Lua
 require("NeoComposer").setup()
 ```
