@@ -1,7 +1,7 @@
-if vim.g.neocomposer_setup then
-  return
-end
+-- if vim.g.neocomposer_setup then
+--   return
+-- end
 
-require('NeoComposer').setup()
+-- require('NeoComposer').setup()
 
-vim.g.neocomposer_setup = true
+-- vim.g.neocomposer_setup = true
