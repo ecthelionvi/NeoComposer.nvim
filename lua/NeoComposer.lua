@@ -36,21 +36,10 @@ local config = {
   },
 }
 function NeoComposer.setup(user_settings)
-  -- if vim.g.neocomposer_setup then
-  --   return
-  -- end
-
-  -- vim.g.neocomposer_setup = true
   user_settings = user_settings or {}
 
   for k, v in pairs(user_settings) do
-    if k == "keymaps" and type(v) == "table" then
-      for key, value in pairs(v) do
-        config.keymaps[key] = value
-      end
-    else
-      config[k] = v
-    end
+    config[k] = v
   end
 
   auto.setup()
