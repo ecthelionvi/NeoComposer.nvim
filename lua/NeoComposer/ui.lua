@@ -13,11 +13,6 @@ local highlight = require('NeoComposer.highlight')
 BUFH = nil
 WIN_ID = nil
 
-function ui.get_bg_color()
-  local output = vim.api.nvim_exec("highlight Normal", true)
-  local bg_color = output:match("guibg=(#[0-9a-fA-F]+)")
-  return bg_color
-end
 
 function ui.close_menu()
   api.nvim_win_close(WIN_ID, true)
@@ -112,6 +107,12 @@ function ui.get_menu_items()
   if #items == 0 then state.set_queued_macro() end
 
   return items
+end
+
+function ui.get_bg_color()
+  local output = vim.api.nvim_exec("highlight Normal", true)
+  local bg_color = output:match("guibg=(#[0-9a-fA-F]+)")
+  return bg_color
 end
 
 function ui.clear_preview()
