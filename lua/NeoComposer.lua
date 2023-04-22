@@ -39,7 +39,13 @@ function NeoComposer.setup(user_settings)
   user_settings = user_settings or {}
 
   for k, v in pairs(user_settings) do
-    config[k] = v
+    if k == "keymaps" and type(v) == "table" then
+      for key, value in pairs(v) do
+        config.keymaps[key] = value
+      end
+    else
+      config[k] = v
+    end
   end
 
   auto.setup()
