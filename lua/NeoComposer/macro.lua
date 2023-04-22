@@ -242,7 +242,7 @@ function macro.stop_macro()
   state.set_recording(false)
   local macro_content = fn.getreg('q')
   local stripped_macro = macro_content:gsub("%s", "")
-  if stripped_macro == "q" then
+  if stripped_macro == state.get_record_key() then
     macro.notify("recording_comlete_empty")
     return
   end
