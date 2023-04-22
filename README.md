@@ -75,7 +75,7 @@ require('NeoComposer.ui').status_recording()
 
 ```lua
 lualine_c = {
-	{ require('NeoComposer.ui').recordingStatus },
+	{ require('NeoComposer.ui').status_recording() },
 },
 ```
 ## 🐢 Delay Timer
