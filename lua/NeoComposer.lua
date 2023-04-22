@@ -36,11 +36,11 @@ local config = {
   },
 }
 function NeoComposer.setup(user_settings)
-  if vim.g.neocomposer_setup then
-    return
-  end
+  -- if vim.g.neocomposer_setup then
+  --   return
+  -- end
 
-  vim.g.neocomposer_setup = true
+  -- vim.g.neocomposer_setup = true
   user_settings = user_settings or {}
 
   for k, v in pairs(user_settings) do
