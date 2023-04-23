@@ -18,19 +18,21 @@ end
 function macros.show_macros(opts)
   opts = opts or {}
 
-  pickers.new(opts, {
-    prompt_title = "NeoComposer Macros",
-    finder = macros.generate_new_finder(),
-    sorter = conf.generic_sorter(opts),
-    attach_mappings = function(_, map)
-      map("n", "yq", macros.yank_macro)
-      map("n", "d", macros.delete_macro)
-      map("i", "<cr>", macros.queue_macro)
-      map("n", "<cr>", macros.queue_macro)
-      map("i", "<c-d>", macros.delete_macro)
-      return true
-    end,
-  }):find()
+  pickers
+    .new(opts, {
+      prompt_title = "NeoComposer Macros",
+      finder = macros.generate_new_finder(),
+      sorter = conf.generic_sorter(opts),
+      attach_mappings = function(_, map)
+        map("n", "yq", macros.yank_macro)
+        map("n", "d", macros.delete_macro)
+        map("i", "<cr>", macros.queue_macro)
+        map("n", "<cr>", macros.queue_macro)
+        map("i", "<c-d>", macros.delete_macro)
+        return true
+      end,
+    })
+    :find()
 end
 
 function macros.yank_macro(prompt_bufnr)
