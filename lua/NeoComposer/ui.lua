@@ -63,8 +63,6 @@ function ui.cycle_prev()
   end
   new_macros = rev
 
-  table.insert(new_macros, macros[1])
-
   state.set_macros(new_macros)
   preview.show(new_macros[1].content)
   state.set_queued_macro(new_macros[1].content)
