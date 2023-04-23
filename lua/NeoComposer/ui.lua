@@ -57,9 +57,11 @@ function ui.cycle_prev()
   local macros = state.get_macros()
   if #macros == 0 then return end
 
-  for i = 1, #macros do
-    table.insert(new_macros, macros[i])
+  local rev = {}
+  for i = #macros, 1, -1 do
+    rev[#rev + 1] = macros[i]
   end
+  new_macros = rev
 
   table.insert(new_macros, macros[1])
 
