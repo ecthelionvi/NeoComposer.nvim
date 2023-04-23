@@ -59,7 +59,7 @@ function ui.cycle_prev()
 
   table.insert(new_macros, macros[#macros])
   for i = 1, #macros - 1 do
-    table.insert(new_macros, macros[i])
+    table.insert(new_macros, i, macros[i])
   end
 
   table.insert(new_macros, macros[1])
