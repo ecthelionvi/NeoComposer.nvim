@@ -41,11 +41,11 @@ function ui.cycle_next()
   local macros = state.get_macros()
   if #macros == 0 then return end
 
-  table.insert(new_macros, macros[#macros]) -- Move the last macro to the first position
-  for i = 1, #macros - 1 do
-    table.insert(new_macros, macros[i])    -- Add the remaining macros
+  for i = 2, #macros do
+    table.insert(new_macros, macros[i])
   end
 
+  table.insert(new_macros, macros[1])
 
   state.set_macros(new_macros)
   preview.show(new_macros[1].content)
@@ -57,7 +57,8 @@ function ui.cycle_prev()
   local macros = state.get_macros()
   if #macros == 0 then return end
 
-  for i = 2, #macros do
+  table.insert(new_macros, macros[#macros])
+  for i = 1, #macros - 1 do
     table.insert(new_macros, macros[i])
   end
 
