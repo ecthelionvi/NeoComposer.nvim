@@ -57,13 +57,11 @@ function ui.cycle_prev()
   local macros = state.get_macros()
   if #macros == 0 then return end
 
-  -- shift the order of the macros by one position
-  local last_macro = table.remove(macros, #macros)
-  table.insert(macros, 1, last_macro)
+  for i = 1, #macros do
+    table.insert(new_macros, macros[i])
+  end
 
-  -- swap the first and last macros
-  local first_macro = table.remove(macros, 1)
-  table.insert(macros, #macros + 1, first_macro)
+  table.insert(new_macros, macros[1])
 
   state.set_macros(new_macros)
   preview.show(new_macros[1].content)
