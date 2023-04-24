@@ -24,7 +24,7 @@ function store.save_macros_to_database()
     for _, macro in ipairs(macros) do
       store.db:insert("macros", {
         number = macro.number,
-        content = macro.content
+        content = macro.content,
       })
     end
   end)
@@ -54,14 +54,16 @@ end
 
 function store.load_macros_from_database()
   local macros = {}
-  if require("NeoComposer.state").macros_loaded then return end
+  if require("NeoComposer.state").macros_loaded then
+    return
+  end
 
   store.db:with_open(function()
     local results = store.db:select("macros", { order_by = { asc = "number" } })
     for _, macro in ipairs(results) do
       table.insert(macros, {
         content = macro.content,
-        number = macro.number
+        number = macro.number,
       })
     end
   end)

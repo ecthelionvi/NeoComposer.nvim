@@ -2,13 +2,14 @@ local macro = {}
 
 local fn = vim.fn
 local cmd = vim.cmd
-local state = require('NeoComposer.state')
-local preview = require('NeoComposer.preview')
+local state = require("NeoComposer.state")
+local preview = require("NeoComposer.preview")
+local config = require("NeoComposer.config")
 
 STOP_MACRO = false
 
 function macro.record_macro()
-  fn.setreg('q', '')
+  fn.setreg("q", "")
   cmd("silent! normal! qq")
   state.set_recording(true)
   macro.notify("recording")
@@ -74,7 +75,7 @@ function macro.halt_macro()
 end
 
 function macro.execute_macro()
-  fn.setreg('@', state.get_queued_macro())
+  fn.setreg("@", state.get_queued_macro())
   cmd('silent! noautocmd normal! @"')
 end
 
@@ -98,7 +99,7 @@ function macro.yank_macro(macro_number)
     local decoded_macro = vim.fn.keytrans(macro_content)
     vim.api.nvim_command("let @" .. "+ = '" .. decoded_macro:gsub("'", "''") .. "'")
     vim.api.nvim_command("let @" .. "* = '" .. decoded_macro:gsub("'", "''") .. "'")
-    vim.api.nvim_command("let @" .. "\"" .. " = '" .. decoded_macro:gsub("'", "''") .. "'")
+    vim.api.nvim_command("let @" .. '"' .. " = '" .. decoded_macro:gsub("'", "''") .. "'")
     macro.notify("yanked", decoded_macro)
   end
 
@@ -150,9 +151,13 @@ function macro.play_macro()
 
   if success then
     if timer then
-      timer:start(150, 0, vim.schedule_wrap(function()
-        state.set_playing(false)
-      end))
+      timer:start(
+        150,
+        0,
+        vim.schedule_wrap(function()
+          state.set_playing(false)
+        end)
+      )
     end
   else
     state.set_playing(false)
@@ -194,7 +199,6 @@ function macro.update_and_set_queued_macro(macro_number, saved)
 end
 
 function macro.play_macro_with_delay()
-  local delay_timer = state.get_delay_timer()
   local count = tonumber(vim.v.count) or 1
   local timer = vim.loop.new_timer()
   count = count > 0 and count or 1
@@ -207,7 +211,7 @@ function macro.play_macro_with_delay()
       current_count = current_count + 1
       macro.execute_macro()
       if timer then
-        timer:start(delay_timer, 0, vim.schedule_wrap(delay_macro))
+        timer:start(config.delay_timer, 0, vim.schedule_wrap(delay_macro))
       end
     else
       if timer then
@@ -219,7 +223,7 @@ function macro.play_macro_with_delay()
 
   local success, result = pcall(function()
     if timer then
-      timer:start(delay_timer, 0, vim.schedule_wrap(delay_macro))
+      timer:start(config.delay_timer, 0, vim.schedule_wrap(delay_macro))
     end
   end)
 
@@ -232,7 +236,7 @@ function macro.play_macro_with_delay()
 end
 
 function macro.filter_keymap(macro_content)
-  local decode_key = fn.keytrans(state.get_record_key())
+  local decode_key = fn.keytrans(tostring(config.keymaps.toggle_record))
   local filtered_macro = macro_content:sub(1, -1 * (#decode_key + 1))
   return filtered_macro
 end
@@ -240,9 +244,9 @@ end
 function macro.stop_macro()
   cmd("silent! normal! q")
   state.set_recording(false)
-  local macro_content = fn.getreg('q')
+  local macro_content = fn.getreg("q")
   local stripped_macro = macro_content:gsub("%s", "")
-  if stripped_macro == state.get_record_key() then
+  if stripped_macro == tostring(config.keymaps.toggle_record) then
     macro.notify("recording_comlete_empty")
     return
   end
@@ -260,8 +264,9 @@ function macro.stop_macro()
 end
 
 function macro.notify(switch, macro_content)
-  if not state.get_notify() then return end
-  local delay_timer = state.get_delay_timer()
+  if not config.notify then
+    return
+  end
   local messages = {
     yanked = "Yanked ",
     error = "Macro Error: ",
@@ -271,12 +276,18 @@ function macro.notify(switch, macro_content)
     delay_disabled = "Delay Disabled",
     recording_comlete = "Macro Saved ",
     recording_comlete_empty = "Macro Saved (Empty)",
-    delay = "Delay Enabled (Timer: " .. delay_timer .. "ms)",
+    delay = "Delay Enabled (Timer: " .. config.delay_timer .. "ms)",
   }
 
   local message = messages[switch]
   if message then
-    if switch == "playing" or switch == "recording_comlete" or switch == "queued" or switch == "error" or switch == "yanked" then
+    if
+      switch == "playing"
+      or switch == "recording_comlete"
+      or switch == "queued"
+      or switch == "error"
+      or switch == "yanked"
+    then
       local truncated_macro = (tostring(macro_content)):sub(1, 30)
       message = message .. "(" .. truncated_macro .. (macro_content:len() > 30 and "..." or "") .. ")"
     end

@@ -21,7 +21,7 @@ function highlight.highlight_yank(start_pos, end_pos)
     "NeoComposerYanked",
     start_pos,
     end_pos,
-    { regtype = 'v', inclusive = true }
+    { regtype = "v", inclusive = true }
   )
 
   highlight.timer:start(
