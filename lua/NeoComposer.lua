@@ -17,8 +17,8 @@ local NeoComposer = {}
 local auto = require("NeoComposer.auto")
 local maps = require("NeoComposer.maps")
 local store = require("NeoComposer.store")
-local highlight = require("NeoComposer.highlight")
 local config = require("NeoComposer.config")
+local highlight = require("NeoComposer.highlight")
 
 function NeoComposer.setup(user_settings)
   user_settings = user_settings or {}
@@ -27,6 +27,10 @@ function NeoComposer.setup(user_settings)
     if k == "keymaps" and type(v) == "table" then
       for key, value in pairs(v) do
         config.keymaps[key] = value
+      end
+    elseif k == "colors" and type(v) == "table" then
+      for key, value in pairs(v) do
+        config.colors[key] = value
       end
     else
       config[k] = v
