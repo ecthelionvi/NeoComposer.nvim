@@ -61,11 +61,11 @@ function ui.cycle_prev()
     return
   end
 
-  for i = 2, #macros do
+  table.insert(new_macros, macros[#macros])
+
+  for i = 1, #macros - 1 do
     table.insert(new_macros, macros[i])
   end
-
-  table.insert(new_macros, macros[1])
 
   state.set_macros(new_macros)
   preview.show(new_macros[1].content)

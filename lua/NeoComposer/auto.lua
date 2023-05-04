@@ -16,13 +16,8 @@ function auto.setup()
   autocmd({ "CursorHold", "CursorMoved" }, {
     group = "NeoComposer",
     callback = function()
-      pcall(function()
-        require("NeoComposer.ui").clear_preview()
-      end)
-      pcall(function()
-        require("NeoComposer.ui").clear_preview()
-      end)
-    end,
+      pcall(function() require('NeoComposer.ui').clear_preview() end)
+    end
   })
 
   autocmd("RecordingEnter", {
