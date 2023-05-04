@@ -16,25 +16,10 @@ local NeoComposer = {}
 
 local auto = require("NeoComposer.auto")
 local maps = require("NeoComposer.maps")
-local state = require("NeoComposer.state")
 local store = require("NeoComposer.store")
-local highlight = require('NeoComposer.highlight')
+local highlight = require("NeoComposer.highlight")
+local config = require("NeoComposer.config")
 
-local config = {
-  notify = true,
-  delay_timer = "150",
-  status_bg = "#16161e",
-  preview_fg = "#ff9e64",
-  keymaps = {
-    play_macro = "Q",
-    yank_macro = "yq",
-    stop_macro = "cq",
-    toggle_record = "q",
-    cycle_next = "<c-n>",
-    cycle_prev = "<c-p>",
-    toggle_macro_menu = "<m-q>",
-  },
-}
 function NeoComposer.setup(user_settings)
   user_settings = user_settings or {}
 
@@ -51,8 +36,7 @@ function NeoComposer.setup(user_settings)
   auto.setup()
   store.setup()
   highlight.setup()
-  maps.setup(config)
-  state.setup(config)
+  maps.setup()
 end
 
 return NeoComposer

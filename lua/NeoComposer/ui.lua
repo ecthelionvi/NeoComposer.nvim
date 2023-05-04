@@ -4,15 +4,15 @@ local api = vim.api
 local autocmd = api.nvim_create_autocmd
 local preview_timer = vim.loop.new_timer()
 
-local popup = require('plenary.popup')
-local state = require('NeoComposer.state')
-local macro = require('NeoComposer.macro')
-local preview = require('NeoComposer.preview')
-local highlight = require('NeoComposer.highlight')
+local popup = require("plenary.popup")
+local state = require("NeoComposer.state")
+local macro = require("NeoComposer.macro")
+local preview = require("NeoComposer.preview")
+local highlight = require("NeoComposer.highlight")
+local config = require("NeoComposer.config")
 
 BUFH = nil
 WIN_ID = nil
-
 
 function ui.close_menu()
   api.nvim_win_close(WIN_ID, true)
@@ -39,7 +39,9 @@ end
 function ui.cycle_next()
   local new_macros = {}
   local macros = state.get_macros()
-  if #macros == 0 then return end
+  if #macros == 0 then
+    return
+  end
 
   for i = 2, #macros do
     table.insert(new_macros, macros[i])
@@ -55,7 +57,9 @@ end
 function ui.cycle_prev()
   local new_macros = {}
   local macros = state.get_macros()
-  if #macros == 0 then return end
+  if #macros == 0 then
+    return
+  end
 
   table.insert(new_macros, macros[#macros])
 
@@ -99,12 +103,14 @@ function ui.get_menu_items()
 
   for i, line in ipairs(lines) do
     local stripped_line = line:gsub("%s", "")
-    if stripped_line ~= '' then
+    if stripped_line ~= "" then
       table.insert(items, { number = i, content = line })
     end
   end
 
-  if #items == 0 then state.set_queued_macro() end
+  if #items == 0 then
+    state.set_queued_macro()
+  end
 
   return items
 end
@@ -122,11 +128,15 @@ function ui.clear_preview()
     end
   end
   if preview_timer then
-    preview_timer:start(1000, 0, vim.schedule_wrap(function()
-      preview.hide()
-      preview_timer:stop()
-      preview_timer:close()
-    end))
+    preview_timer:start(
+      1000,
+      0,
+      vim.schedule_wrap(function()
+        preview.hide()
+        preview_timer:stop()
+        preview_timer:close()
+      end)
+    )
   end
 end
 
@@ -134,7 +144,7 @@ function ui.create_window()
   local width = 60
   local height = 10
   local bufnr = api.nvim_create_buf(false, false)
-  local border_chars = { '─', '│', '─', '│', '╭', '╮', '╯', '╰' }
+  local border_chars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" }
 
   local WIN_ID, win = popup.create(bufnr, {
     minwidth = width,
@@ -148,8 +158,8 @@ function ui.create_window()
   local bg_color = ui.get_bg_color()
   vim.cmd(string.format("highlight ComposerNormal guibg=%s", bg_color))
 
-  api.nvim_win_set_option(WIN_ID, 'winhl', "Normal:ComposerNormal")
-  api.nvim_win_set_option(win.border.win_id, 'winhl', "Normal:ComposerBorder")
+  api.nvim_win_set_option(WIN_ID, "winhl", "Normal:ComposerNormal")
+  api.nvim_win_set_option(win.border.win_id, "winhl", "Normal:ComposerBorder")
 
   return {
     bufnr = bufnr,
@@ -162,14 +172,9 @@ function ui.status_recording()
     vim.cmd(string.format("highlight %s guifg=%s guibg=%s", group, fg, bg))
   end
 
-  local bg_color = "#16161e"
-  local red_color = "#ec5f67"
-  local blue_color = "#5fb3b3"
-  local green_color = "#99c794"
-
-  set_highlight("DelaySymbol", blue_color, bg_color)
-  set_highlight("PlayingSymbol", green_color, bg_color)
-  set_highlight("RecordingSymbol", red_color, bg_color)
+  set_highlight("DelaySymbol", config.colors.blue, config.colors.bg)
+  set_highlight("PlayingSymbol", config.colors.green, config.colors.bg)
+  set_highlight("RecordingSymbol", config.colors.red, config.colors.bg)
 
   local status = ""
   local delay_enabled = state.get_delay()
@@ -221,14 +226,18 @@ function ui.toggle_macro_menu()
     nested = true,
     buffer = BUFH,
     group = "NeoComposer",
-    callback = function() pcall(require('NeoComposer.ui').toggle_macro_menu) end
+    callback = function()
+      pcall(require("NeoComposer.ui").toggle_macro_menu)
+    end,
   })
 
   autocmd({ "InsertLeave", "TextChanged" }, {
     nested = true,
     buffer = BUFH,
     group = "NeoComposer",
-    callback = function() pcall(require('NeoComposer.ui').save_macro_content_in_menu) end
+    callback = function()
+      pcall(require("NeoComposer.ui").save_macro_content_in_menu)
+    end,
   })
 end
 
@@ -240,12 +249,12 @@ function ui.edit_macros()
     height = vim.o.lines,
     col = 0,
     row = 0,
-    style = "minimal"
+    style = "minimal",
   })
 
   local bg_color = ui.get_bg_color()
   vim.cmd(string.format("highlight MacroEditorNormal guibg=%s", bg_color))
-  api.nvim_win_set_option(win_id, 'winhl', "Normal:MacroEditorNormal")
+  api.nvim_win_set_option(win_id, "winhl", "Normal:MacroEditorNormal")
 
   api.nvim_win_set_option(win_id, "number", true)
   api.nvim_buf_set_option(bufnr, "bufhidden", "wipe")
@@ -269,14 +278,18 @@ function ui.edit_macros()
     nested = true,
     buffer = bufnr,
     group = "NeoComposer",
-    callback = function() pcall(require('NeoComposer.ui').close_macro_editor) end
+    callback = function()
+      pcall(require("NeoComposer.ui").close_macro_editor)
+    end,
   })
 
   autocmd({ "InsertLeave", "TextChanged" }, {
     nested = true,
     buffer = bufnr,
     group = "NeoComposer",
-    callback = function() pcall(require('NeoComposer.ui').save_macro_content_in_editor) end
+    callback = function()
+      pcall(require("NeoComposer.ui").save_macro_content_in_editor)
+    end,
   })
 
   BUFH = bufnr

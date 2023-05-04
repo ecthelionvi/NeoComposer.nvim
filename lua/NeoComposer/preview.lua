@@ -1,10 +1,9 @@
 local preview = {}
-local state = require("NeoComposer.state")
+local config = require("NeoComposer.config")
 
-local preview_fg = state.get_preview_fg()
 local preview_ns = vim.api.nvim_create_namespace("Preview")
 
-vim.cmd('highlight Preview guifg= ' .. preview_fg)
+vim.cmd("highlight Preview guifg= " .. config.colors.fg)
 
 function preview.show(text)
   local cursor = vim.api.nvim_win_get_cursor(0)
