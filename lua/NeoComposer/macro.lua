@@ -133,8 +133,9 @@ end
 
 local function get_count()
   if string.lower(vim.api.nvim_get_mode().mode) == "v" then
-    local region = vim.region(0, "v", ".", "V", true)
-    return #vim.tbl_keys(region)
+    local curpos = vim.fn.getpos(".")
+    local vispos = vim.fn.getpos("v")
+    return math.abs(curpos[2] - vispos[2]) + 1
   end
 
   local count = tonumber(vim.v.count) or 1
