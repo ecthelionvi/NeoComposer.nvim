@@ -131,11 +131,46 @@ function macro.delete_macro(macro_number)
   state.set_macros(macros)
 end
 
-function macro.play_macro()
+local function get_count()
+  if string.lower(vim.api.nvim_get_mode().mode) == "v" then
+    local curpos = vim.fn.getpos(".")
+    local vispos = vim.fn.getpos("v")
+    return math.abs(curpos[2] - vispos[2]) + 1
+  end
+
   local count = tonumber(vim.v.count) or 1
+  return count > 0 and count or 1
+end
+
+local function start_pos_in_selection()
+  local start = vim.fn.getpos("v")
+  local end_ = vim.fn.getpos(".")
+  local start_row = start[2]
+  local end_row = end_[2]
+  local start_col = start[3]
+  local end_col = end_[3]
+
+  if end_row < start_row then
+    start_row, end_row = end_row, start_row
+    start_col, end_col = end_col, start_col
+  end
+
+  return { start_row, start_col }
+end
+
+local function enter_normal_mode()
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "x", false)
+end
+
+function macro.play_macro()
+  local count = get_count()
   local timer = vim.loop.new_timer()
-  count = count > 0 and count or 1
   local current_count = 0
+
+  local start_pos = start_pos_in_selection()
+  enter_normal_mode()
+  vim.api.nvim_win_set_cursor(0, start_pos)
+
   state.set_playing(true)
   STOP_MACRO = false
 
@@ -199,9 +234,13 @@ function macro.update_and_set_queued_macro(macro_number, saved)
 end
 
 function macro.play_macro_with_delay()
-  local count = tonumber(vim.v.count) or 1
+  local count = get_count()
   local timer = vim.loop.new_timer()
-  count = count > 0 and count or 1
+
+  local start_pos = start_pos_in_selection()
+  enter_normal_mode()
+  vim.api.nvim_win_set_cursor(0, start_pos)
+
   STOP_MACRO = false
   local current_count = 0
   state.set_playing(true)
