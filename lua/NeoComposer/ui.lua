@@ -134,7 +134,9 @@ function ui.clear_preview()
       vim.schedule_wrap(function()
         preview.hide()
         preview_timer:stop()
-        preview_timer:close()
+        if not preview_timer:is_closing() then
+          preview_timer:close()
+        end
       end)
     )
   end
