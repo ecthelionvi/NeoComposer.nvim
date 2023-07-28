@@ -297,7 +297,7 @@ function macro.stop_macro()
   table.insert(macros, { number = macro_number, content = filtered_macro_content })
   state.set_macros(macros)
 
-  if macro_number == 1 then
+  if macro_number == 1 or config.queue_most_recent then
     macro.update_and_set_queued_macro(macro_number, true)
   end
 end
