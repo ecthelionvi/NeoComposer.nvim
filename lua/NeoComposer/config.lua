@@ -1,6 +1,7 @@
 return {
   notify = true,
   delay_timer = 150,
+  queue_most_recent = false,
   colors = {
     bg = "#16161e",
     fg = "#ff9e64",
