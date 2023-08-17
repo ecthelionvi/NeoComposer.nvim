@@ -83,6 +83,31 @@ lualine_c = {
 },
 ```
 
+For event-driven statuslines such as [heirline](https://github.com/rebelot/heirline), Neocomposer 
+emits `User` autocmd events to notify the user of status changes.
+
+| User Event              | Trigger                                           | Data                    |
+| ----------------------- | ------------------------------------------------- | ----------------------- |
+| NeoComposerRecordingSet | When when starting or finishing recording a macro | { recording: boolean }  |
+| NeoComposerPlayingSet   | When when starting or finishing playing a macro   | { playing: boolean }    |
+| NeoComposerDelaySet     | When when delay is set                            | { delay: boolean }      |
+
+```lua
+{
+  provider = function(self)
+    return self.status or ""  
+  end,
+  update = {
+    "User",
+    pattern = { "NeoComposerRecordingSet", "NeoComposerPlayingSet", "NeoComposerDelaySet" },
+    callback = function(self)
+      self.status = require("neocomposer.ui").status_recording()
+    end
+  }
+}
+```
+
+
 ## 🐢 Delay Timer
 
 For complex macros over large counts, you can toggle a delay between macro playback using the `ToggleDelay` command:
