@@ -15,6 +15,12 @@
       src="https://img.shields.io/badge/NeoVim-%2357A143.svg?&style=for-the-badge&logo=neovim&logoColor=white"
     />
   </a>
+  <a href="https://github.com/m4xshen/smartcolumn.nvim/contributors">
+    <img
+      alt="Contributors"
+      src="https://img.shields.io/github/contributors/ecthelionvi/NeoComposer.nvim?style=for-the-badge&logo=opensourceinitiative&color=abe9b3&logoColor=d9e0ee&labelColor=282a36"
+    />
+  </a>
 </p>
 
 <p align="center">
