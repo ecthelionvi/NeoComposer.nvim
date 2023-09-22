@@ -9,13 +9,27 @@ function maps.setup()
   user_cmd("ToggleDelay", "lua require ('NeoComposer.macro').toggle_delay()", {})
   user_cmd("ClearNeoComposer", "lua require ('NeoComposer.store').clear_macros()", {})
 
-  map("n", config.keymaps.cycle_next, "<cmd>lua require('NeoComposer.ui').cycle_next()<cr>", opts)
-  map("n", config.keymaps.cycle_prev, "<cmd>lua require('NeoComposer.ui').cycle_prev()<cr>", opts)
-  map("n", config.keymaps.yank_macro, "<cmd>lua require('NeoComposer.macro').yank_macro()<cr>", opts)
-  map("n", config.keymaps.stop_macro, "<cmd>lua require('NeoComposer.macro').halt_macro()<cr>", opts)
-  map("n", config.keymaps.toggle_record, "<cmd>lua require('NeoComposer.macro').toggle_record()<cr>", opts)
-  map({ "n", "x" }, config.keymaps.play_macro, "<cmd>lua require('NeoComposer.macro').toggle_play_macro()<cr>", opts)
-  map("n", config.keymaps.toggle_macro_menu, "<cmd>lua require('NeoComposer.ui').toggle_macro_menu()<cr>", opts)
+  if config.keymaps.cycle_next then
+    map("n", config.keymaps.cycle_next, "<cmd>lua require('NeoComposer.ui').cycle_next()<cr>", opts)
+  end
+  if config.keymaps.cycle_prev then
+    map("n", config.keymaps.cycle_prev, "<cmd>lua require('NeoComposer.ui').cycle_prev()<cr>", opts)
+  end
+  if config.keymaps.yank_macro then
+    map("n", config.keymaps.yank_macro, "<cmd>lua require('NeoComposer.macro').yank_macro()<cr>", opts)
+  end
+  if config.keymaps.stop_macro then
+    map("n", config.keymaps.stop_macro, "<cmd>lua require('NeoComposer.macro').halt_macro()<cr>", opts)
+  end
+  if config.keymaps.toggle_macro_menu then
+    map("n", config.keymaps.toggle_macro_menu, "<cmd>lua require('NeoComposer.ui').toggle_macro_menu()<cr>", opts)
+  end
+  if config.keymaps.toggle_record then
+    map("n", config.keymaps.toggle_record, "<cmd>lua require('NeoComposer.macro').toggle_record()<cr>", opts)
+  end
+  if config.keymaps.toggle_play_macro then
+    map({ "n", "x" }, config.keymaps.play_macro, "<cmd>lua require('NeoComposer.macro').toggle_play_macro()<cr>", opts)
+  end
 end
 
 return maps
