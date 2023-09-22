@@ -89,7 +89,7 @@ lualine_c = {
 },
 ```
 
-For event-driven statuslines such as [heirline](https://github.com/rebelot/heirline), Neocomposer 
+For event-driven statuslines such as [heirline](https://github.com/rebelot/heirline), Neocomposer
 emits `User` autocmd events to notify the user of status changes.
 
 | User Event              | Trigger                                           | Data                    |
@@ -101,7 +101,7 @@ emits `User` autocmd events to notify the user of status changes.
 ```lua
 {
   provider = function(self)
-    return self.status or ""  
+    return self.status or ""
   end,
   update = {
     "User",
@@ -218,6 +218,13 @@ The available options:
 local config = {
   notify = true,
   delay_timer = 150,
+  queue_most_recent = false,
+  window = {
+    border = "rounded",
+    winhl = {
+      Normal = "ComposerNormal",
+    },
+  },
   colors = {
     bg = "#16161e",
     fg = "#ff9e64",
@@ -238,5 +245,5 @@ local config = {
 ```
 
 <h3 align="center">
-Made with ❤️  in Nebraska 
+Made with ❤️  in Nebraska
 </h3>

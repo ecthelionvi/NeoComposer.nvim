@@ -146,22 +146,29 @@ function ui.create_window()
   local width = 60
   local height = 10
   local bufnr = api.nvim_create_buf(false, false)
-  local border_chars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" }
 
-  local WIN_ID, win = popup.create(bufnr, {
-    minwidth = width,
-    minheight = height,
-    title = "NeoComposer",
-    borderchars = border_chars,
+  local border_chars = config.window.border or "rounded"
+  -- border is required for title
+  if border_chars == "none" then
+    border_chars = "rounded"
+  end
+
+  local WIN_ID = vim.api.nvim_open_win(bufnr, true, {
+    relative = "editor",
+    width = width,
+    height = height,
+    title = " NeoComposer ",
+    title_pos = "center",
+    border = border_chars,
     col = math.floor((vim.o.columns - width) / 2),
-    line = math.floor(((vim.o.lines - height) / 2) - 1),
+    row = math.floor(((vim.o.lines - height) / 2) - 1),
   })
 
-  local bg_color = ui.get_bg_color()
-  vim.cmd(string.format("highlight ComposerNormal guibg=%s", bg_color))
-
-  api.nvim_win_set_option(WIN_ID, "winhl", "Normal:ComposerNormal")
-  api.nvim_win_set_option(win.border.win_id, "winhl", "Normal:ComposerBorder")
+  local winhl = ""
+  for hl, val in pairs(config.window.winhl) do
+    winhl = winhl .. hl .. ":" .. val .. ","
+  end
+  api.nvim_win_set_option(WIN_ID, "winhl", winhl:sub(1, -2))
 
   return {
     bufnr = bufnr,
@@ -212,7 +219,6 @@ function ui.toggle_macro_menu()
     api.nvim_buf_set_keymap(BUFH, mode, lhs, rhs, { silent = true })
   end
 
-  api.nvim_win_set_option(WIN_ID, "number", true)
   api.nvim_buf_set_name(BUFH, "neocomposer-menu")
   api.nvim_buf_set_option(BUFH, "buftype", "acwrite")
   api.nvim_buf_set_option(BUFH, "bufhidden", "delete")
