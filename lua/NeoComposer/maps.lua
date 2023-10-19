@@ -27,7 +27,7 @@ function maps.setup()
   if config.keymaps.toggle_record then
     map("n", config.keymaps.toggle_record, "<cmd>lua require('NeoComposer.macro').toggle_record()<cr>", opts)
   end
-  if config.keymaps.toggle_play_macro then
+  if config.keymaps.play_macro then
     map({ "n", "x" }, config.keymaps.play_macro, "<cmd>lua require('NeoComposer.macro').toggle_play_macro()<cr>", opts)
   end
 end
