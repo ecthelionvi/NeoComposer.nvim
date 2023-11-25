@@ -143,8 +143,8 @@ function ui.clear_preview()
 end
 
 function ui.create_window()
-  local width = 60
-  local height = 10
+  local width = config.window.width or 60
+  local height = config.window.height or 10
   local bufnr = api.nvim_create_buf(false, false)
 
   local border_chars = config.window.border or "rounded"
