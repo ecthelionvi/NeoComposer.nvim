@@ -3,6 +3,8 @@ return {
   delay_timer = 150,
   queue_most_recent = false,
   window = {
+    width = 60,
+    height = 10,
     border = "rounded",
     winhl = {
       Normal = "ComposerNormal",
