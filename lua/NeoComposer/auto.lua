@@ -4,8 +4,10 @@ local augroup = vim.api.nvim_create_augroup
 local auto = {}
 
 function auto.setup()
+  local au = augroup("NeoComposer", { clear = true })
+
   autocmd({ "BufEnter", "BufLeave" }, {
-    group = augroup("NeoComposer", { clear = true }),
+    group = au,
     callback = function()
       pcall(function()
         require("NeoComposer.preview").hide()
@@ -14,14 +16,16 @@ function auto.setup()
   })
 
   autocmd({ "CursorHold", "CursorMoved" }, {
-    group = "NeoComposer",
+    group = au,
     callback = function()
-      pcall(function() require('NeoComposer.ui').clear_preview() end)
-    end
+      pcall(function()
+        require("NeoComposer.ui").clear_preview()
+      end)
+    end,
   })
 
   autocmd("RecordingEnter", {
-    group = "NeoComposer",
+    group = au,
     callback = function()
       pcall(function()
         require("NeoComposer.state").set_recording(true)
@@ -30,7 +34,7 @@ function auto.setup()
   })
 
   autocmd("RecordingLeave", {
-    group = "NeoComposer",
+    group = au,
     callback = function()
       pcall(function()
         require("NeoComposer.state").set_recording(false)
@@ -38,9 +42,9 @@ function auto.setup()
     end,
   })
 
-  autocmd("QuitPre", {
+  autocmd("VimLeavePre", {
     once = true,
-    group = "NeoComposer",
+    group = au,
     callback = function()
       pcall(function()
         require("NeoComposer.store").save_macros_to_database()
@@ -48,18 +52,28 @@ function auto.setup()
     end,
   })
 
-  autocmd("VimEnter", {
-    once = true,
-    group = "NeoComposer",
-    callback = function()
-      pcall(function()
-        require("NeoComposer.store").load_macros_from_database()
-      end)
-      pcall(function()
-        require("NeoComposer.state").set_queued_macro_on_startup()
-      end)
-    end,
-  })
+  if vim.v.vim_did_enter == 1 then
+    -- Handle lazy-loading the plugin
+    pcall(function()
+      require("NeoComposer.store").load_macros_from_database()
+    end)
+    pcall(function()
+      require("NeoComposer.state").set_queued_macro_on_startup()
+    end)
+  else
+    autocmd("VimEnter", {
+      once = true,
+      group = au,
+      callback = function()
+        pcall(function()
+          require("NeoComposer.store").load_macros_from_database()
+        end)
+        pcall(function()
+          require("NeoComposer.state").set_queued_macro_on_startup()
+        end)
+      end,
+    })
+  end
 end
 
 return auto
