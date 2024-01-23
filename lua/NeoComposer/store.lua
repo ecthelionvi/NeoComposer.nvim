@@ -18,15 +18,36 @@ end
 
 function store.save_macros_to_database()
   local macros = require("NeoComposer.state").get_macros()
-  store.clear_macros()
 
   store.db:with_open(function()
-    for _, macro in ipairs(macros) do
-      store.db:insert("macros", {
-        number = macro.number,
-        content = macro.content,
-      })
+    for i, macro in ipairs(macros) do
+      if
+        store.db:select("macros", {
+          where = {
+            number = i,
+          },
+        })[1]
+      then
+        store.db:update("macros", {
+          where = {
+            number = i,
+          },
+          set = {
+            content = macro.content,
+          },
+        })
+      else
+        store.db:insert("macros", {
+          number = i,
+          content = macro.content,
+        })
+      end
     end
+    store.db:delete("macros", {
+      number = {
+        [">"] = #macros + 1,
+      },
+    })
   end)
 end
 

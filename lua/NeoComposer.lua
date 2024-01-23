@@ -27,8 +27,8 @@ function NeoComposer.setup(user_settings)
     config[k] = v
   end
 
-  auto.setup()
   store.setup()
+  auto.setup()
   highlight.setup()
   maps.setup()
 end
