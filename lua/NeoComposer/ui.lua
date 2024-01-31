@@ -181,21 +181,27 @@ function ui.status_recording()
     vim.cmd(string.format("highlight %s guifg=%s guibg=%s", group, fg, bg))
   end
 
+  -- Set highlights for symbols
   set_highlight("DelaySymbol", config.colors.blue, config.colors.bg)
   set_highlight("PlayingSymbol", config.colors.green, config.colors.bg)
   set_highlight("RecordingSymbol", config.colors.red, config.colors.bg)
+
+  -- Set highlights for text
+  set_highlight("DelayText", config.colors.text_delay, config.colors.text_bg)
+  set_highlight("PlayingText", config.colors.text_play, config.colors.text_bg)
+  set_highlight("RecordingText", config.colors.text_rec, config.colors.text_bg)
 
   local status = ""
   local delay_enabled = state.get_delay()
 
   if state.get_recording() then
-    status = "%#RecordingSymbol#%* REC"
+    status = "%#RecordingSymbol#%*%#RecordingText# REC%*"
   elseif state.get_playing() then
-    status = "%#PlayingSymbol#%* PLAY"
+    status = "%#PlayingSymbol#%*%#PlayingText# PLAY%*"
   end
 
   if delay_enabled then
-    status = (status == "" and "" or (status .. " ")) .. "%#DelaySymbol#󰔛%* DELAY"
+    status = (status == "" and "" or (status .. " ")) .. "%#DelaySymbol#󰔛%*%#DelayText# DELAY%*"
   end
 
   return status

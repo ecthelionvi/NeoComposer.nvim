@@ -18,6 +18,10 @@ return {
     red = "#ec5f67",
     blue = "#5fb3b3",
     green = "#99c794",
+    text_bg = "#16161e",
+    text_delay = "",
+    text_play = "",
+    text_rec = "",
   },
   keymaps = {
     play_macro = "Q",
