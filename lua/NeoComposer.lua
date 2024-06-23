@@ -19,18 +19,20 @@ local maps = require("NeoComposer.maps")
 local store = require("NeoComposer.store")
 local config = require("NeoComposer.config")
 local highlight = require("NeoComposer.highlight")
+local ui = require("NeoComposer.ui")
 
 function NeoComposer.setup(user_settings)
-  user_settings = vim.tbl_deep_extend("force", config, user_settings or {})
+	user_settings = vim.tbl_deep_extend("force", config, user_settings or {})
 
-  for k, v in pairs(user_settings) do
-    config[k] = v
-  end
+	for k, v in pairs(user_settings) do
+		config[k] = v
+	end
 
-  store.setup()
-  auto.setup()
-  highlight.setup()
-  maps.setup()
+	store.setup()
+	auto.setup()
+	highlight.setup()
+	maps.setup()
+	ui.setup()
 end
 
 return NeoComposer
