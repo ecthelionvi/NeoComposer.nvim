@@ -233,13 +233,14 @@ function ui.toggle_macro_menu()
 		api.nvim_buf_set_option(BUFH, "buftype", "acwrite")
 		api.nvim_buf_set_option(BUFH, "bufhidden", "delete")
 		api.nvim_buf_set_name(BUFH, buffer_name)
-
-		local contents = {}
-		for i, m in ipairs(state.get_macros()) do
-			contents[i] = m.content
-		end
-		api.nvim_buf_set_lines(BUFH, 0, #contents, false, contents)
 	end
+
+	local contents = {}
+	for i, m in ipairs(state.get_macros()) do
+		contents[i] = m.content
+	end
+
+	api.nvim_buf_set_lines(BUFH, 0, -1, false, contents)
 
 	local function map(mode, lhs, rhs)
 		api.nvim_buf_set_keymap(BUFH, mode, lhs, rhs, { silent = true })
