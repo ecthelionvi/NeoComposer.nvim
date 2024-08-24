@@ -209,28 +209,41 @@ function ui.status_recording()
 	return status
 end
 
+function ui.get_existing_buffer(name)
+	for _, bufnr in ipairs(api.nvim_list_bufs()) do
+		if api.nvim_buf_get_name(bufnr) == name then
+			return bufnr
+		end
+	end
+	return nil
+end
+
 function ui.toggle_macro_menu()
 	if WIN_ID and api.nvim_win_is_valid(WIN_ID) then
 		ui.close_menu()
 		return
 	end
 
-	local win_info = ui.create_window()
-	WIN_ID, BUFH = win_info.win_id, win_info.bufnr
+	local buffer_name = "neocomposer-menu"
+	BUFH = ui.get_existing_buffer(buffer_name)
 
-	local contents = {}
-	for i, m in ipairs(state.get_macros()) do
-		contents[i] = m.content
+	if not BUFH then
+		local win_info = ui.create_window()
+		WIN_ID, BUFH = win_info.win_id, win_info.bufnr
+		api.nvim_buf_set_option(BUFH, "buftype", "acwrite")
+		api.nvim_buf_set_option(BUFH, "bufhidden", "delete")
+		api.nvim_buf_set_name(BUFH, buffer_name)
+
+		local contents = {}
+		for i, m in ipairs(state.get_macros()) do
+			contents[i] = m.content
+		end
+		api.nvim_buf_set_lines(BUFH, 0, #contents, false, contents)
 	end
 
 	local function map(mode, lhs, rhs)
 		api.nvim_buf_set_keymap(BUFH, mode, lhs, rhs, { silent = true })
 	end
-
-	api.nvim_buf_set_name(BUFH, "neocomposer-menu")
-	api.nvim_buf_set_option(BUFH, "buftype", "acwrite")
-	api.nvim_buf_set_option(BUFH, "bufhidden", "delete")
-	api.nvim_buf_set_lines(BUFH, 0, #contents, false, contents)
 
 	map("n", "q", "<Cmd>lua require('NeoComposer.ui').toggle_macro_menu()<CR>")
 	map("n", "yq", "<Cmd>lua require('NeoComposer.ui').yank_macro_from_menu()<CR>")
