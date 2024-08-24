@@ -1,12 +1,27 @@
 return {
   notify = true,
   delay_timer = 150,
+  queue_most_recent = false,
+  window = {
+    width = 60,
+    height = 10,
+    border = "rounded",
+    winhl = {
+      Normal = "ComposerNormal",
+      FloatBorder = "ComposerBorder",
+      FloatTitle = "ComposerTitle",
+    },
+  },
   colors = {
     bg = "#16161e",
     fg = "#ff9e64",
     red = "#ec5f67",
     blue = "#5fb3b3",
     green = "#99c794",
+    text_bg = "#16161e",
+    text_delay = "",
+    text_play = "",
+    text_rec = "",
   },
   keymaps = {
     play_macro = "Q",

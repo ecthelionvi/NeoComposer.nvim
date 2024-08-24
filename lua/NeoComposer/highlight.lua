@@ -1,3 +1,5 @@
+local config = require("NeoComposer.config")
+
 local highlight = {}
 
 function highlight.setup()
@@ -5,6 +7,16 @@ function highlight.setup()
   highlight.config = { on_yank = true, timer = 500 }
   highlight.hl_yank = vim.api.nvim_create_namespace("NeoComposerYank")
   vim.api.nvim_set_hl(0, "NeoComposerYanked", { link = "Search", default = true })
+
+  vim.api.nvim_set_hl(0, "ComposerNormal", {
+    bg = config.colors.bg,
+  })
+  vim.api.nvim_set_hl(0, "ComposerBorder", {
+    link = "NormalNC"
+  })
+  vim.api.nvim_set_hl(0, "ComposerTitle", {
+    link = "NormalNC"
+  })
 end
 
 function highlight.highlight_yank(start_pos, end_pos)

@@ -26,6 +26,10 @@ end
 
 function state.set_delay(delay)
   state.delay = delay
+  vim.api.nvim_exec_autocmds("User", {
+    pattern = "NeoComposerDelaySet",
+    data = { delay = delay },
+  })
 end
 
 function state.get_queued_macro()
@@ -34,6 +38,10 @@ end
 
 function state.set_playing(playing)
   state.playing = playing
+  vim.api.nvim_exec_autocmds("User", {
+    pattern = "NeoComposerPlayingSet",
+    data = { playing = playing },
+  })
 end
 
 function state.set_macros(new_macros)
@@ -42,6 +50,10 @@ end
 
 function state.set_recording(recording)
   state.recording = recording
+  vim.api.nvim_exec_autocmds("User", {
+    pattern = "NeoComposerRecordingSet",
+    data = { recording = recording },
+  })
 end
 
 function state.set_macros_loaded(loaded)

@@ -17,26 +17,22 @@ local NeoComposer = {}
 local auto = require("NeoComposer.auto")
 local maps = require("NeoComposer.maps")
 local store = require("NeoComposer.store")
-local highlight = require("NeoComposer.highlight")
 local config = require("NeoComposer.config")
+local highlight = require("NeoComposer.highlight")
+local ui = require("NeoComposer.ui")
 
 function NeoComposer.setup(user_settings)
-  user_settings = user_settings or {}
+	user_settings = vim.tbl_deep_extend("force", config, user_settings or {})
 
-  for k, v in pairs(user_settings) do
-    if k == "keymaps" and type(v) == "table" then
-      for key, value in pairs(v) do
-        config.keymaps[key] = value
-      end
-    else
-      config[k] = v
-    end
-  end
+	for k, v in pairs(user_settings) do
+		config[k] = v
+	end
 
-  auto.setup()
-  store.setup()
-  highlight.setup()
-  maps.setup()
+	store.setup()
+	auto.setup()
+	highlight.setup()
+	maps.setup()
+	ui.setup()
 end
 
 return NeoComposer

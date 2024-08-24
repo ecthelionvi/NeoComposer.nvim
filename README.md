@@ -15,6 +15,12 @@
       src="https://img.shields.io/badge/NeoVim-%2357A143.svg?&style=for-the-badge&logo=neovim&logoColor=white"
     />
   </a>
+  <a href="https://github.com/ecthelionvi/NeoComposer.nvim/contributors">
+    <img
+      alt="Contributors"
+      src="https://img.shields.io/github/contributors/ecthelionvi/NeoComposer.nvim?style=for-the-badge&logo=opensourceinitiative&color=abe9b3&logoColor=d9e0ee&labelColor=282a36"
+    />
+  </a>
 </p>
 
 <p align="center">
@@ -82,6 +88,31 @@ lualine_c = {
 	{ require('NeoComposer.ui').status_recording },
 },
 ```
+
+For event-driven statuslines such as [heirline](https://github.com/rebelot/heirline), Neocomposer
+emits `User` autocmd events to notify the user of status changes.
+
+| User Event              | Trigger                                           | Data                    |
+| ----------------------- | ------------------------------------------------- | ----------------------- |
+| NeoComposerRecordingSet | When when starting or finishing recording a macro | { recording: boolean }  |
+| NeoComposerPlayingSet   | When when starting or finishing playing a macro   | { playing: boolean }    |
+| NeoComposerDelaySet     | When when delay is set                            | { delay: boolean }      |
+
+```lua
+{
+  provider = function(self)
+    return self.status or ""
+  end,
+  update = {
+    "User",
+    pattern = { "NeoComposerRecordingSet", "NeoComposerPlayingSet", "NeoComposerDelaySet" },
+    callback = function(self)
+      self.status = require("neocomposer.ui").status_recording()
+    end
+  }
+}
+```
+
 
 ## 🐢 Delay Timer
 
@@ -187,6 +218,15 @@ The available options:
 local config = {
   notify = true,
   delay_timer = 150,
+  queue_most_recent = false,
+  window = {
+    width = 60,
+    height = 10,
+    border = "rounded",
+    winhl = {
+      Normal = "ComposerNormal",
+    },
+  },
   colors = {
     bg = "#16161e",
     fg = "#ff9e64",
@@ -207,5 +247,5 @@ local config = {
 ```
 
 <h3 align="center">
-Made with ❤️  in Nebraska 
+Made with ❤️  in Nebraska
 </h3>
